@@ -21,8 +21,8 @@ class AlternatifController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode_alternatif' => 'required|string|max:10|unique:alternatif',
-            'nama_alternatif' => 'required|string|max:100',
+            'nisn' => 'required|string|max:20|unique:tabel_alternatif',
+            'nama_siswa' => 'required|string|max:100',
         ]);
 
         Alternatif::create($request->all());
@@ -38,8 +38,8 @@ class AlternatifController extends Controller
     public function update(Request $request, Alternatif $alternatif)
     {
         $request->validate([
-            'kode_alternatif' => 'required|string|max:10|unique:alternatif,kode_alternatif,' . $alternatif->id_alternatif . ',id_alternatif',
-            'nama_alternatif' => 'required|string|max:100',
+            'nisn' => 'required|string|max:20|unique:tabel_alternatif,nisn,' . $alternatif->id_alternatif . ',id_alternatif',
+            'nama_siswa' => 'required|string|max:100',
         ]);
 
         $alternatif->update($request->all());

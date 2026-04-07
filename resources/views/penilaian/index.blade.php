@@ -3,7 +3,7 @@
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-edit mr-1"></i> Data Penilaian</h1>
+    <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-edit mr-1"></i> Penilaian Kompetensi Siswa</h1>
 </div>
 
 @if(session('success'))
@@ -26,7 +26,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-danger"><i class="fa fa-table"></i> Daftar Data Penilaian</h6>
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-table"></i> Daftar Nilai Siswa per Kriteria</h6>
         <button class="btn btn-sm btn-success shadow-sm btn-create" data-toggle="modal" data-target="#penilaianModal">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
         </button>
@@ -34,7 +34,7 @@
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead class="bg-danger text-white">
+                <thead class="bg-primary text-white">
                     <tr>
                         <th width="5%" class="text-center">No</th>
                         <th class="text-left">Alternatif</th>
@@ -48,13 +48,13 @@
                     @foreach($alternatifs as $alternatif)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="font-weight-bold">{{ $alternatif->nama_alternatif }}</td>
+                        <td class="font-weight-bold">{{ $alternatif->nama_siswa }}</td>
                         @foreach($kriterias as $kriteria)
                         @php
                         $nilai = $alternatif->penilaian->where('id_kriteria', $kriteria->id_kriteria)->first();
                         $nilaiValue = $nilai ? $nilai->nilai : 0;
                         @endphp
-                        <td class="text-center">
+                        <td class="text-center font-weight-bold">
                             {{ $nilaiValue }}
                         </td>
                         @endforeach
@@ -86,7 +86,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="penilaianModalLabel">Input Penilaian</h5>
+                <h5 class="modal-title" id="penilaianModalLabel">Input Penilaian Siswa</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -95,11 +95,11 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Alternatif</label>
+                        <label>Nama Siswa</label>
                         <select name="id_alternatif" id="id_alternatif" class="form-control" required>
-                            <option value="">-- Pilih Alternatif --</option>
+                            <option value="">-- Pilih Siswa --</option>
                             @foreach($alternatifs as $alt)
-                            <option value="{{ $alt->id_alternatif }}">{{ $alt->nama_alternatif }}</option>
+                            <option value="{{ $alt->id_alternatif }}">{{ $alt->nama_siswa }} ({{ $alt->nisn }})</option>
                             @endforeach
                         </select>
                     </div>

@@ -3,7 +3,7 @@
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-users mr-1"></i> Data Alternatif</h1>
+    <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-user-graduate mr-1"></i> Data Siswa (Alternatif)</h1>
 </div>
 
 @if(session('success'))
@@ -26,7 +26,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-danger"><i class="fa fa-table"></i> Daftar Data Alternatif</h6>
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-table"></i> Daftar Data Alternatif</h6>
         <button class="btn btn-sm btn-success shadow-sm" data-toggle="modal" data-target="#createModal">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
         </button>
@@ -34,11 +34,11 @@
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead class="bg-danger text-white">
+                <thead class="bg-primary text-white">
                     <tr>
                         <th width="5%" class="text-center">No</th>
-                        <th class="text-center">Kode</th>
-                        <th class="text-center">Nama Alternatif</th>
+                        <th class="text-center">NISN</th>
+                        <th class="text-center">Nama Siswa</th>
                         <th width="15%" class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -46,13 +46,13 @@
                     @foreach($alternatifs as $alternatif)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="text-center">{{ $alternatif->kode_alternatif }}</td>
-                        <td class="text-center">{{ $alternatif->nama_alternatif }}</td>
+                        <td class="text-center">{{ $alternatif->nisn }}</td>
+                        <td class="text-center">{{ $alternatif->nama_siswa }}</td>
                         <td class="text-center">
                             <button class="btn btn-warning btn-sm btn-edit"
                                 data-id="{{ $alternatif->id_alternatif }}"
-                                data-kode="{{ $alternatif->kode_alternatif }}"
-                                data-nama="{{ $alternatif->nama_alternatif }}"
+                                data-nisn="{{ $alternatif->nisn }}"
+                                data-nama="{{ $alternatif->nama_siswa }}"
                                 data-toggle="modal" data-target="#editModal">
                                 <i class="fas fa-edit"></i>
                             </button>
@@ -77,7 +77,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createModalLabel">Tambah Alternatif</h5>
+                <h5 class="modal-title" id="createModalLabel">Tambah Siswa (Alternatif)</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -86,12 +86,12 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Kode Alternatif</label>
-                        <input type="text" name="kode_alternatif" class="form-control" required placeholder="Contoh: A1">
+                        <label>NISN</label>
+                        <input type="text" name="nisn" class="form-control" required placeholder="Contoh: 0012345678">
                     </div>
                     <div class="form-group">
-                        <label>Nama Alternatif</label>
-                        <input type="text" name="nama_alternatif" class="form-control" required placeholder="Contoh: Alternatif 1">
+                        <label>Nama Siswa</label>
+                        <input type="text" name="nama_siswa" class="form-control" required placeholder="Nama Lengkap Siswa">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -108,7 +108,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Alternatif</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit Siswa (Alternatif)</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -118,12 +118,12 @@
                 @method('PUT')
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Kode Alternatif</label>
-                        <input type="text" name="kode_alternatif" id="edit_kode_alternatif" class="form-control" required>
+                        <label>NISN</label>
+                        <input type="text" name="nisn" id="edit_nisn" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Nama Alternatif</label>
-                        <input type="text" name="nama_alternatif" id="edit_nama_alternatif" class="form-control" required>
+                        <label>Nama Siswa</label>
+                        <input type="text" name="nama_siswa" id="edit_nama_siswa" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -144,13 +144,13 @@
         // Handle Edit Modal
         $('.btn-edit').on('click', function() {
             var id = $(this).data('id');
-            var kode = $(this).data('kode');
+            var nisn = $(this).data('nisn');
             var nama = $(this).data('nama');
             var url = "{{ url('alternatif') }}/" + id;
 
             $('#editForm').attr('action', url);
-            $('#edit_kode_alternatif').val(kode);
-            $('#edit_nama_alternatif').val(nama);
+            $('#edit_nisn').val(nisn);
+            $('#edit_nama_siswa').val(nama);
         });
     });
 </script>

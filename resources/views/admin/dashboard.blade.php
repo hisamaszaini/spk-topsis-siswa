@@ -9,8 +9,8 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            Selamat datang <strong>{{ Auth::user()->name }}!</strong> Anda bisa mengoperasikan sistem dengan wewenang tertentu melalui pilihan menu di bawah.
+        <div class="alert alert-primary alert-dismissible shadow fade show" role="alert" style="border-radius: 15px; border: none; background: linear-gradient(45deg, #4e73df, #224abe); color: white;">
+            <i class="fas fa-school mr-2"></i> Selamat datang di Sistem Rekomendasi Lomba Siswa SD, <strong>{{ Auth::user()->name }}!</strong> Silakan kelola data kriteria dan alternatif untuk mendapatkan hasil rekomendasi terbaik.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -27,7 +27,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">Data Kriteria</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Master Data</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Kriteria Penilaian</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-cube fa-2x text-gray-300"></i>
@@ -45,7 +46,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">Data Sub Kriteria</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Master Data</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Sub Kriteria</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-cubes fa-2x text-gray-300"></i>
@@ -63,7 +65,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">Data Alternatif</div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Master Data</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Data Alternatif (Lomba/Siswa)</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -81,7 +84,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">Data Penilaian</div>
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Input Data</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Penilaian Lomba</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-edit fa-2x text-gray-300"></i>
@@ -99,7 +103,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">Data Perhitungan</div>
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Proses</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Perhitungan TOPSIS</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calculator fa-2x text-gray-300"></i>
@@ -117,7 +122,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">Data Hasil Akhir</div>
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Output</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Hasil Rekomendasi</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-chart-area fa-2x text-gray-300"></i>

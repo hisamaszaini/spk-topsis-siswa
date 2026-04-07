@@ -21,10 +21,10 @@ class KriteriaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode_kriteria' => 'required|string|max:10|unique:kriteria',
+            'kode_kriteria' => 'required|string|max:10|unique:tabel_kriteria',
             'nama_kriteria' => 'required|string|max:100',
             'bobot' => 'required|numeric',
-            'jenis' => 'required|in:Benefit,Cost',
+            'jenis' => 'required|in:benefit,cost',
         ]);
 
         Kriteria::create($request->all());
@@ -40,10 +40,10 @@ class KriteriaController extends Controller
     public function update(Request $request, Kriteria $kriterium)
     {
         $request->validate([
-            'kode_kriteria' => 'required|string|max:10|unique:kriteria,kode_kriteria,' . $kriterium->id_kriteria . ',id_kriteria',
+            'kode_kriteria' => 'required|string|max:10|unique:tabel_kriteria,kode_kriteria,' . $kriterium->id_kriteria . ',id_kriteria',
             'nama_kriteria' => 'required|string|max:100',
             'bobot' => 'required|numeric',
-            'jenis' => 'required|in:Benefit,Cost',
+            'jenis' => 'required|in:benefit,cost',
         ]);
 
         $kriterium->update($request->all());

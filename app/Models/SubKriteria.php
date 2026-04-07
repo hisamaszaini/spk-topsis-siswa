@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubKriteria extends Model
 {
-    protected $table = 'sub_kriteria';
+    protected $table = 'tabel_sub_kriteria';
     protected $primaryKey = 'id_sub';
     protected $guarded = [];
 

@@ -5,9 +5,9 @@
 <div class="row align-items-center justify-content-center" style="min-height: 80vh;">
 
     <div class="col-lg-6 text-white text-justify">
-        <h1 class="h3 font-weight-bold mb-4">Sistem Pendukung Keputusan Metode SAW</h1>
+        <h1 class="h3 font-weight-bold mb-4">Sistem Pendukung Keputusan Metode TOPSIS</h1>
         <p class="mb-4">Sistem Pendukung Keputusan (SPK) merupakan suatu sistem informasi spesifik yang ditujukan untuk membantu manajemen dalam mengambil keputusan yang berkaitan dengan persoalan yang bersifat semi terstruktur.</p>
-        <p>Simple Additive Weighting (SAW) adalah salah satu Metode Fuzzy Multiple Attribute Decision Making (FMADM) yang mampu menyelesaikan masalah multiple attribute decision making dengan cara membobotkan semua kriteria dan alternatif yang menghasilkan nilai referensi yang tepat.</p>
+        <p>Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS) adalah salah satu metode pengambilan keputusan multi-kriteria yang didasarkan pada konsep bahwa alternatif yang dipilih harus memiliki jarak terpendek dari solusi ideal positif dan jarak terjauh dari solusi ideal negatif.</p>
     </div>
 
     <div class="col-lg-5 offset-lg-1">

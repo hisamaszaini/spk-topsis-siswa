@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Alternatif extends Model
 {
-    protected $table = 'alternatif';
+    protected $table = 'tabel_alternatif';
     protected $primaryKey = 'id_alternatif';
     protected $guarded = [];
 

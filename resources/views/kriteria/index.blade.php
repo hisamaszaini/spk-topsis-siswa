@@ -26,7 +26,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-danger"><i class="fa fa-table"></i> Daftar Data Kriteria</h6>
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-table"></i> Daftar Data Kriteria</h6>
         <a href="{{ route('kriteria.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data Kriteria
         </a>
@@ -34,7 +34,7 @@
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead class="bg-danger text-white">
+                <thead class="bg-primary text-white">
                     <tr>
                         <th width="5%" class="text-center">No</th>
                         <th class="text-center">Kode Kriteria</th>
@@ -51,7 +51,7 @@
                         <td class="text-center">{{ $kriteria->kode_kriteria }}</td>
                         <td class="text-center">{{ $kriteria->nama_kriteria }}</td>
                         <td class="text-center">{{ $kriteria->bobot }}</td>
-                        <td class="text-center">{{ $kriteria->jenis }}</td>
+                        <td class="text-center text-capitalize">{{ $kriteria->jenis }}</td>
                         <td class="text-center">
                             <a href="{{ route('kriteria.edit', $kriteria->id_kriteria) }}" class="btn btn-warning btn-sm">
                                 <i class="fas fa-edit"></i>

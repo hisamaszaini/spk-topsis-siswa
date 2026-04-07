@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penilaian', function (Blueprint $table) {
+        Schema::create('tabel_penilaian', function (Blueprint $table) {
             $table->id('id_penilaian');
             $table->unsignedBigInteger('id_alternatif');
             $table->unsignedBigInteger('id_kriteria');
             $table->float('nilai');
             $table->timestamps();
 
-            $table->foreign('id_alternatif')->references('id_alternatif')->on('alternatif')->onDelete('cascade');
-            $table->foreign('id_kriteria')->references('id_kriteria')->on('kriteria')->onDelete('cascade');
+            $table->foreign('id_alternatif')->references('id_alternatif')->on('tabel_alternatif')->onDelete('cascade');
+            $table->foreign('id_kriteria')->references('id_kriteria')->on('tabel_kriteria')->onDelete('cascade');
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('penilaians');
+        Schema::dropIfExists('tabel_penilaian');
     }
 };

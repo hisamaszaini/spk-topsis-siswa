@@ -13,8 +13,8 @@ class PenilaianController extends Controller
     public function index()
     {
         $alternatifs = Alternatif::with(['penilaian' => function ($query) {
-            $query->join('kriteria', 'penilaian.id_kriteria', '=', 'kriteria.id_kriteria')
-                ->orderBy('kriteria.id_kriteria'); // Ensure consistent order
+            $query->join('tabel_kriteria', 'tabel_penilaian.id_kriteria', '=', 'tabel_kriteria.id_kriteria')
+                ->orderBy('tabel_kriteria.id_kriteria'); // Ensure consistent order
         }])->get();
         // Eager load sub_kriteria for dropdowns in Modal
         $kriterias = Kriteria::with('sub_kriteria')->get();
@@ -32,7 +32,7 @@ class PenilaianController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_alternatif' => 'required|exists:alternatif,id_alternatif',
+            'id_alternatif' => 'required|exists:tabel_alternatif,id_alternatif',
             'nilai' => 'required|array',
         ]);
 

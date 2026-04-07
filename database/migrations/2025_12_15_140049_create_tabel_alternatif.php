@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sub_kriteria', function (Blueprint $table) {
-            $table->id('id_sub');
-            $table->unsignedBigInteger('id_kriteria');
-            $table->string('nama_sub', 100);
-            $table->float('nilai');
+        Schema::create('tabel_alternatif', function (Blueprint $table) {
+            $table->id('id_alternatif');
+            $table->string('nisn', 20)->unique();
+            $table->string('nama_siswa', 100);
             $table->timestamps();
-
-            $table->foreign('id_kriteria')->references('id_kriteria')->on('kriteria')->onDelete('cascade');
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sub_kriterias');
+        Schema::dropIfExists('tabel_alternatif');
     }
 };

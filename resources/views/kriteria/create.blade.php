@@ -47,8 +47,8 @@
                         <label class="font-weight-bold">Jenis Kriteria</label>
                         <select name="jenis" class="form-control" required>
                             <option value="">--Pilih Jenis Kriteria--</option>
-                            <option value="Benefit" {{ old('jenis') == 'Benefit' ? 'selected' : '' }}>Benefit</option>
-                            <option value="Cost" {{ old('jenis') == 'Cost' ? 'selected' : '' }}>Cost</option>
+                            <option value="benefit" {{ old('jenis') == 'benefit' ? 'selected' : '' }}>Benefit</option>
+                            <option value="cost" {{ old('jenis') == 'cost' ? 'selected' : '' }}>Cost</option>
                         </select>
                     </div>
                 </div>

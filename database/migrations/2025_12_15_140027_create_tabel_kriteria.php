@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('alternatif', function (Blueprint $table) {
-            $table->id('id_alternatif');
-            $table->string('kode_alternatif', 10);
-            $table->string('nama_alternatif', 100);
+        Schema::create('tabel_kriteria', function (Blueprint $table) {
+            $table->id('id_kriteria');
+            $table->string('kode_kriteria', 10);
+            $table->string('nama_kriteria', 100);
+            $table->float('bobot');
+            $table->enum('jenis', ['benefit', 'cost']); // Lowercase as requested
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('alternatifs');
+        Schema::dropIfExists('tabel_kriteria');
     }
 };

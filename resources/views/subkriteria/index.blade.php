@@ -3,7 +3,7 @@
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-cubes mr-1"></i> Data Sub Kriteria</h1>
+    <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-cubes mr-1"></i> Data Sub-Kriteria</h1>
 </div>
 
 @if(session('success'))
@@ -24,10 +24,10 @@
 </div>
 @endif
 
-@foreach($kriterias as $kriteria)
+@forelse($kriterias as $kriteria)
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-danger"><i class="fa fa-table"></i> {{ $kriteria->nama_kriteria }} ({{ $kriteria->kode_kriteria }})</h6>
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-table"></i> {{ $kriteria->nama_kriteria }} ({{ $kriteria->kode_kriteria }})</h6>
         <button class="btn btn-sm btn-success shadow-sm btn-create" data-id="{{ $kriteria->id_kriteria }}" data-toggle="modal" data-target="#createModal">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
         </button>
@@ -35,7 +35,7 @@
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered table-datatable" width="100%" cellspacing="0">
-                <thead class="bg-danger text-white">
+                <thead class="bg-primary text-white">
                     <tr>
                         <th width="5%" class="text-center">No</th>
                         <th class="text-center">Nama Sub Kriteria</th>
@@ -73,7 +73,16 @@
         </div>
     </div>
 </div>
-@endforeach
+@empty
+<div class="card shadow mb-4">
+    <div class="card-body text-center py-5">
+        <i class="fas fa-info-circle fa-3x text-gray-300 mb-3"></i>
+        <h5 class="text-gray-800">Belum ada Kriteria</h5>
+        <p class="text-gray-500">Silakan tambahkan data kriteria terlebih dahulu sebelum mengelola sub-kriteria.</p>
+        <a href="{{ route('kriteria.index') }}" class="btn btn-primary btn-sm">Ke Halaman Kriteria</a>
+    </div>
+</div>
+@endforelse
 
 <!-- Create Modal -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
