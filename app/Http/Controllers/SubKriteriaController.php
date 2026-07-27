@@ -23,7 +23,7 @@ class SubKriteriaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_kriteria' => 'required|exists:kriteria,id_kriteria',
+            'id_kriteria' => 'required|exists:tabel_kriteria,id_kriteria',
             'nama_sub' => 'required|string|max:100',
             'nilai' => 'required|numeric',
         ]);
@@ -42,7 +42,7 @@ class SubKriteriaController extends Controller
     public function update(Request $request, SubKriteria $subKriterium)
     {
         $request->validate([
-            'id_kriteria' => 'required|exists:kriteria,id_kriteria',
+            'id_kriteria' => 'required|exists:tabel_kriteria,id_kriteria',
             'nama_sub' => 'required|string|max:100',
             'nilai' => 'required|numeric',
         ]);

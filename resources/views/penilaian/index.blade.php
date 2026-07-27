@@ -3,7 +3,7 @@
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-edit mr-1"></i> Penilaian Kompetensi Siswa</h1>
+    <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-edit mr-1"></i> Data Penilaian Siswa</h1>
 </div>
 
 @if(session('success'))
@@ -26,7 +26,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-table"></i> Daftar Nilai Siswa per Kriteria</h6>
+        <h6 class="m-0 font-weight-bold text-danger"><i class="fa fa-table"></i> Daftar Data Penilaian</h6>
         <button class="btn btn-sm btn-success shadow-sm btn-create" data-toggle="modal" data-target="#penilaianModal">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
         </button>

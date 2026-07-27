@@ -83,25 +83,25 @@
             </div>
 
             <!-- Nav Item - Data Kriteria -->
-            <li class="nav-item {{ request()->is('kriteria*') ? 'active' : '' }}">
+            {{-- <li class="nav-item {{ request()->is('kriteria*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('kriteria.index') }}">
                     <i class="fas fa-fw fa-cube"></i>
                     <span>Data Kriteria</span></a>
-            </li>
+            </li> --}}
 
             <!-- Nav Item - Data Sub Kriteria -->
-            <li class="nav-item {{ request()->is('sub-kriteria*') ? 'active' : '' }}">
+            {{-- <li class="nav-item {{ request()->is('sub-kriteria*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('sub-kriteria.index') }}">
                     <i class="fas fa-fw fa-cubes"></i>
                     <span>Data Sub Kriteria</span></a>
-            </li>
+            </li> --}}
 
             <!-- Nav Item - Data Alternatif -->
-            <li class="nav-item {{ request()->is('alternatif*') ? 'active' : '' }}">
+            {{-- <li class="nav-item {{ request()->is('alternatif*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('alternatif.index') }}">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Data Alternatif</span></a>
-            </li>
+            </li> --}}
 
             <!-- Nav Item - Data Penilaian -->
             <li class="nav-item {{ request()->is('penilaian*') ? 'active' : '' }}">

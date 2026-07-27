@@ -10,13 +10,16 @@ use Illuminate\Support\Facades\DB;
 class TopsisService
 {
     /**
-     * Calculate TOPSIS
+     * Menghitung nilai TOPSIS untuk setiap alternatif berdasarkan kriteria yang ada.
+     * TOPSIS (Technique for Order of Preference by Similarity to Ideal Solution)
+     * didasarkan pada konsep bahwa alternatif yang dipilih harus memiliki jarak terpendek 
+     * dari solusi ideal positif dan jarak terjauh dari solusi ideal negatif.
      *
      * @return array
      */
     public function calculate(): array
     {
-        // 1. Fetch Data
+        // 1. Ambil Data Kriteria dan Alternatif dari Database
         $kriterias = Kriteria::all();
         $alternatifs = Alternatif::with('penilaian')->get();
 
@@ -26,7 +29,8 @@ class TopsisService
             ];
         }
 
-        // 2. Step 1: Decision Matrix (X)
+        // 2. Langkah 1: Membangun Matriks Keputusan (X)
+        // Mengubah data penilaian mentah ke dalam format matriks agar mudah dihitung.
         $matrixX = [];
         foreach ($alternatifs as $alternatif) {
             $row = [];
@@ -37,8 +41,9 @@ class TopsisService
             $matrixX[$alternatif->id_alternatif] = $row;
         }
 
-        // 3. Step 2: Normalized Decision Matrix (R)
+        // 3. Langkah 2: Matriks Ternormalisasi (R)
         // R_ij = x_ij / sqrt(sum(x_kj^2))
+        // Nilai setiap kriteria dibagi dengan akar kuadrat dari jumlah kuadrat semua nilai pada kriteria tersebut.
         $divider = [];
         foreach ($kriterias as $kriteria) {
             $sumSquared = 0;
@@ -58,8 +63,9 @@ class TopsisService
             }
         }
 
-        // 4. Step 3: Weighted Normalized Decision Matrix (V)
+        // 4. Langkah 3: Matriks Ternormalisasi Terbobot (V)
         // V_ij = w_j * R_ij
+        // Mengalikan nilai matriks ternormalisasi dengan bobot masing-masing kriteria.
         $matrixV = [];
         foreach ($alternatifs as $alternatif) {
             foreach ($kriterias as $kriteria) {
@@ -69,26 +75,28 @@ class TopsisService
             }
         }
 
-        // 5. Step 4: Ideal Solution Positive (A+) and Negative (A-)
-        $pis = []; // A+
-        $nis = []; // A-
+        // 5. Langkah 4: Menentukan Solusi Ideal Positif (A+) dan Solusi Ideal Negatif (A-)
+        // Mencari nilai terbaik (maksimum untuk benefit, minimum untuk cost) dan terburuk.
+        $pis = []; // A+ (Ideal Positif)
+        $nis = []; // A- (Ideal Negatif)
         foreach ($kriterias as $kriteria) {
             $columnV = [];
             foreach ($alternatifs as $alternatif) {
                 $columnV[] = $matrixV[$alternatif->id_alternatif][$kriteria->id_kriteria];
             }
 
-            if ($kriteria->jenis == 'benefit') { // Lowercase check
+            if ($kriteria->jenis == 'benefit') { // Jika kriteria menguntungkan
                 $pis[$kriteria->id_kriteria] = max($columnV);
                 $nis[$kriteria->id_kriteria] = min($columnV);
-            } else {
+            } else { // Jika kriteria adalah beban/biaya (cost)
                 $pis[$kriteria->id_kriteria] = min($columnV);
                 $nis[$kriteria->id_kriteria] = max($columnV);
             }
         }
 
-        // 6. Step 5: Separation Measure (D+ and D-)
+        // 6. Langkah 5: Menghitung Jarak Solusi (D+ dan D-)
         // D_i+ = sqrt(sum((v_ij - a_j+)^2))
+        // Menghitung seberapa jauh posisi alternatif dari nilai ideal terbaik dan ideal terburuk.
         $distPIS = [];
         $distNIS = [];
         foreach ($alternatifs as $alternatif) {
@@ -103,8 +111,9 @@ class TopsisService
             $distNIS[$alternatif->id_alternatif] = sqrt($sumNIS);
         }
 
-        // 7. Step 6: Relative Closeness to Ideal Solution (C_i)
+        // 7. Langkah 6: Nilai Kedekatan Relatif terhadap Solusi Ideal (C_i)
         // C_i = D_i- / (D_i- + D_i+)
+        // Skor akhir yang berkisar antara 0 - 1. Semakin mendekati 1, semakin baik alternatif tersebut.
         $preference = [];
         foreach ($alternatifs as $alternatif) {
             $dp = $distPIS[$alternatif->id_alternatif];
@@ -119,12 +128,12 @@ class TopsisService
             ];
         }
 
-        // Sort by score descending
+        // Mengurutkan hasil berdasarkan skor tertinggi ke terendah
         usort($preference, function ($a, $b) {
             return $b['score'] <=> $a['score'];
         });
 
-        // Add rank
+        // Menambahkan nomor urut (ranking)
         foreach ($preference as $key => $item) {
             $preference[$key]['rank'] = $key + 1;
         }
@@ -144,7 +153,8 @@ class TopsisService
     }
 
     /**
-     * Save/Sync calculation results to tabel_hasil
+     * Menyimpan atau menyelaraskan hasil perhitungan ke dalam tabel hasil.
+     * Fungsi ini akan menghapus data lama dan menggantikannya dengan hasil perhitungan terbaru.
      */
     public function saveResults(): void
     {
@@ -153,7 +163,7 @@ class TopsisService
 
         DB::transaction(function () use ($data) {
             // Delete old results to refresh
-            Hasil::truncate();
+            Hasil::query()->delete();
 
             foreach ($data['preference'] as $item) {
                 Hasil::create([
