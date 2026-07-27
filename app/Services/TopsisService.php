@@ -17,7 +17,29 @@ class TopsisService
      *
      * @return array
      */
-    public function calculate(): array
+    public static function getListLomba(): array
+    {
+        return [
+            'matematika' => [
+                'nama' => 'Olimpiade Matematika',
+                'bobot' => ['C1' => 0.70, 'C2' => 0.10, 'C3' => 0.10, 'C4' => 0.10]
+            ],
+            'ipa' => [
+                'nama' => 'Olimpiade IPA',
+                'bobot' => ['C1' => 0.10, 'C2' => 0.70, 'C3' => 0.10, 'C4' => 0.10]
+            ],
+            'indo' => [
+                'nama' => 'Lomba Bahasa Indonesia',
+                'bobot' => ['C1' => 0.10, 'C2' => 0.10, 'C3' => 0.70, 'C4' => 0.10]
+            ],
+            'olga' => [
+                'nama' => 'Lomba Olahraga',
+                'bobot' => ['C1' => 0.10, 'C2' => 0.10, 'C3' => 0.10, 'C4' => 0.70]
+            ]
+        ];
+    }
+
+    public function calculate(string $keyLomba = 'general'): array
     {
         // 1. Ambil Data Kriteria dan Alternatif dari Database
         $kriterias = Kriteria::with('sub_kriteria')->get();
@@ -27,6 +49,13 @@ class TopsisService
             return [
                 'error' => 'Data Kriteria atau Alternatif masih kosong.'
             ];
+        }
+
+        // Ambil bobot custom untuk lomba tertentu jika ditentukan
+        $listLomba = self::getListLomba();
+        $customWeights = null;
+        if (isset($listLomba[$keyLomba])) {
+            $customWeights = $listLomba[$keyLomba]['bobot'];
         }
 
         // 2. Langkah 1: Membangun Matriks Keputusan (X)
@@ -84,7 +113,9 @@ class TopsisService
         foreach ($alternatifs as $alternatif) {
             foreach ($kriterias as $kriteria) {
                 $r = $matrixR[$alternatif->id_alternatif][$kriteria->id_kriteria];
-                $w = $kriteria->bobot;
+                $w = ($customWeights && isset($customWeights[$kriteria->kode_kriteria])) 
+                    ? $customWeights[$kriteria->kode_kriteria] 
+                    : $kriteria->bobot;
                 $matrixV[$alternatif->id_alternatif][$kriteria->id_kriteria] = $r * $w;
             }
         }
@@ -171,20 +202,6 @@ class TopsisService
      */
     public function saveResults(): void
     {
-        $data = $this->calculate();
-        if (isset($data['error'])) return;
-
-        DB::transaction(function () use ($data) {
-            // Delete old results to refresh
-            Hasil::query()->delete();
-
-            foreach ($data['preference'] as $item) {
-                Hasil::create([
-                    'id_alternatif' => $item['id_alternatif'],
-                    'nilai_preferensi' => $item['score'],
-                    'peringkat' => $item['rank']
-                ]);
-            }
-        });
+        // No-op: Data is calculated dynamically in memory to support real-time perankingan per lomba.
     }
 }

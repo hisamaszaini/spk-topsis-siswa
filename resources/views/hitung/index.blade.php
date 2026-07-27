@@ -6,6 +6,17 @@
     <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-calculator mr-1"></i> Proses Perhitungan Rekomendasi</h1>
 </div>
 
+<!-- Nav Pills untuk Memilih Jenis Lomba -->
+<ul class="nav nav-pills mb-4 bg-white p-2 rounded shadow-sm border">
+    @foreach($listLomba as $key => $lomba)
+    <li class="nav-item">
+        <a class="nav-link {{ $activeLomba === $key ? 'active font-weight-bold' : 'text-secondary' }}" href="?lomba={{ $key }}">
+            {{ $lomba['nama'] }}
+        </a>
+    </li>
+    @endforeach
+</ul>
+
 <!-- 1. Matriks Keputusan (X) -->
 <div class="card shadow mb-4 border-left-primary">
     <div class="card-header py-3">

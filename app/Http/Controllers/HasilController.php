@@ -2,20 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Hasil;
+use App\Services\TopsisService;
 use Illuminate\Http\Request;
 
 class HasilController extends Controller
 {
+    protected $topsis;
+
+    public function __construct(TopsisService $topsis)
+    {
+        $this->topsis = $topsis;
+    }
+
     public function index()
     {
-        // Ambil hasil yang sudah di-save di tabel_hasil, urutkan berdasarkan peringkat
-        $ranks = Hasil::with('alternatif')->orderBy('peringkat', 'asc')->get();
+        $listLomba = TopsisService::getListLomba();
+        $results = [];
 
-        if ($ranks->isEmpty()) {
-            return redirect()->route('hitung.index')->withErrors('Silakan lakukan perhitungan terlebih dahulu.');
+        foreach ($listLomba as $key => $lomba) {
+            $calc = $this->topsis->calculate($key);
+            if (isset($calc['error'])) {
+                return view('hasil.index', ['error' => $calc['error']]);
+            }
+            $results[$key] = [
+                'nama' => $lomba['nama'],
+                'preference' => $calc['preference']
+            ];
         }
 
-        return view('hasil.index', compact('ranks'));
+        return view('hasil.index', compact('results', 'listLomba'));
     }
 }

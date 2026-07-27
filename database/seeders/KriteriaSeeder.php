@@ -17,7 +17,7 @@ class KriteriaSeeder extends Seeder
             [
                 'kode_kriteria' => 'C1',
                 'nama_kriteria' => 'Nilai Matematika',
-                'bobot' => 0.25,
+                'bobot' => 0.35,
                 'jenis' => 'benefit',
             ],
             [
@@ -29,13 +29,13 @@ class KriteriaSeeder extends Seeder
             [
                 'kode_kriteria' => 'C3',
                 'nama_kriteria' => 'Nilai B. Indo',
-                'bobot' => 0.25,
+                'bobot' => 0.20,
                 'jenis' => 'benefit',
             ],
             [
                 'kode_kriteria' => 'C4',
                 'nama_kriteria' => 'Nilai Olga',
-                'bobot' => 0.25,
+                'bobot' => 0.20,
                 'jenis' => 'benefit',
             ],
         ];

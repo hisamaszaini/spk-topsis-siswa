@@ -17,16 +17,25 @@ class HitungController extends Controller
         $this->topsis = $topsis;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->topsis->calculate();
+        $listLomba = TopsisService::getListLomba();
+        $activeLomba = $request->query('lomba', array_key_first($listLomba));
+
+        if (!array_key_exists($activeLomba, $listLomba)) {
+            $activeLomba = array_key_first($listLomba);
+        }
+
+        $data = $this->topsis->calculate($activeLomba);
 
         if (isset($data['error'])) {
             return redirect()->back()->withErrors($data['error']);
         }
 
-        // Simpan hasil ke tabel_hasil (opsional: bisa dipindah ke tombol khusus jika data sangat besar)
         $this->topsis->saveResults();
+
+        $data['listLomba'] = $listLomba;
+        $data['activeLomba'] = $activeLomba;
 
         return view('hitung.index', $data);
     }

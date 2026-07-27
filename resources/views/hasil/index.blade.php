@@ -10,56 +10,80 @@
         <a href="#" onclick="window.print()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-download fa-sm text-white-50"></i> Cetak / PDF
         </a>
-        <button onclick="exportTableToExcel('dataTable')" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm ml-2">
+        <button onclick="exportActiveTable()" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm ml-2">
             <i class="fas fa-file-excel fa-sm text-white-50"></i> Export Excel
         </button>
     </div>
 </div>
 
+@if(isset($error))
+<div class="alert alert-info shadow border-left-info">
+    <i class="fas fa-info-circle mr-2"></i> {{ $error }}
+</div>
+@else
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="card-header py-3 bg-primary">
         <h6 class="m-0 font-weight-bold text-white">Ranking Hasil Rekomendasi (Metode TOPSIS)</h6>
     </div>
     <div class="card-body">
-        @if(count($ranks) > 0)
-        <div class="table-responsive">
-            <table class="table table-bordered text-dark" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th width="10%">Ranking</th>
-                        <th>Nama Siswa</th>
-                        <th>Nilai Preferensi (Ci)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($ranks as $index => $rank)
-                    <tr class="{{ $index == 0 ? 'bg-light font-weight-bold text-primary' : '' }}">
-                        <td class="text-center">
-                            @if($index == 0)
-                            <span class="badge badge-warning rounded-pill p-2"><i class="fas fa-crown"></i> 1</span>
-                            @elseif($index == 1)
-                            <span class="badge badge-secondary rounded-pill p-2">2</span>
-                            @elseif($index == 2)
-                            <span class="badge badge-danger rounded-pill p-2">3</span>
-                            @else
-                            {{ $index + 1 }}
-                            @endif
-                        </td>
-                        <td>{{ $rank->alternatif->nama_siswa }}</td>
-                        <td class="text-right">{{ number_format($rank->nilai_preferensi, 4) }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <!-- Nav Tabs -->
+        <ul class="nav nav-tabs mb-4" id="lombaTabs" role="tablist">
+            @foreach($listLomba as $key => $lomba)
+            <li class="nav-item" role="presentation">
+                <a class="nav-link {{ $loop->first ? 'active font-weight-bold text-primary' : 'text-secondary' }}" 
+                   id="tab-{{ $key }}" 
+                   data-toggle="tab" 
+                   href="#content-{{ $key }}" 
+                   role="tab" 
+                   aria-controls="content-{{ $key }}" 
+                   aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                    {{ $lomba['nama'] }}
+                </a>
+            </li>
+            @endforeach
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="lombaTabsContent">
+            @foreach($results as $key => $dataLomba)
+            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="content-{{ $key }}" role="tabpanel" aria-labelledby="tab-{{ $key }}">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-dark table-striped" id="dataTable-{{ $key }}" width="100%" cellspacing="0">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th width="10%" class="text-center">Ranking</th>
+                                <th>Nama Siswa</th>
+                                <th class="text-right" width="25%">Nilai Kedekatan (Ci)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($dataLomba['preference'] as $index => $item)
+                            <tr class="{{ $index == 0 ? 'bg-light font-weight-bold text-primary' : '' }}">
+                                <td class="text-center">
+                                    @if($index == 0)
+                                    <span class="badge badge-warning rounded-pill p-2"><i class="fas fa-crown"></i> 1</span>
+                                    @elseif($index == 1)
+                                    <span class="badge badge-secondary rounded-pill p-2">2</span>
+                                    @elseif($index == 2)
+                                    <span class="badge badge-danger rounded-pill p-2">3</span>
+                                    @else
+                                    {{ $index + 1 }}
+                                    @endif
+                                </td>
+                                <td class="font-weight-bold">{{ $item['nama_siswa'] }}</td>
+                                <td class="text-right font-weight-bold text-primary">{{ number_format($item['score'], 4) }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endforeach
         </div>
-        @else
-        <div class="alert alert-info">
-            Belum ada data untuk dihitung. Silahkan input Kriteria, Alternatif, dan Penilaian terlebih dahulu.
-        </div>
-        @endif
     </div>
 </div>
+@endif
 
 <style>
     @media print {
@@ -86,25 +110,34 @@
         /* Hide Sidebar, Topbar, Buttons */
         #accordionSidebar,
         #page-topbar,
-        .btn {
+        .btn,
+        .nav-tabs {
             display: none !important;
         }
     }
 </style>
 
 <script>
-    function exportTableToExcel(tableID, filename = 'hasil-akhir-topsis.xls') {
+    function exportActiveTable() {
+        var activeTabPane = document.querySelector('.tab-pane.active');
+        if (activeTabPane) {
+            var table = activeTabPane.querySelector('table');
+            if (table) {
+                var activeLombaName = document.querySelector('.nav-link.active').innerText.trim();
+                var cleanName = activeLombaName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                exportTableToExcel(table.id, 'hasil-topsis-' + cleanName);
+            }
+        }
+    }
+
+    function exportTableToExcel(tableID, filename) {
         var downloadLink;
         var dataType = 'application/vnd.ms-excel';
         var tableSelect = document.getElementById(tableID);
         var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
 
-        // Specify file name
         filename = filename ? filename + '.xls' : 'excel_data.xls';
-
-        // Create download link element
         downloadLink = document.createElement("a");
-
         document.body.appendChild(downloadLink);
 
         if (navigator.msSaveOrOpenBlob) {
@@ -113,15 +146,25 @@
             });
             navigator.msSaveOrOpenBlob(blob, filename);
         } else {
-            // Create a link to the file
             downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-
-            // Setting the file name
             downloadLink.download = filename;
-
-            //triggering the function
             downloadLink.click();
         }
     }
+
+    // Toggle active font styles on tab click
+    document.addEventListener('DOMContentLoaded', function () {
+        var tabElements = document.querySelectorAll('a[data-toggle="tab"]');
+        tabElements.forEach(function (tab) {
+            tab.addEventListener('shown.bs.tab', function (e) {
+                tabElements.forEach(function (t) {
+                    t.classList.remove('font-weight-bold', 'text-primary');
+                    t.classList.add('text-secondary');
+                });
+                e.target.classList.add('font-weight-bold', 'text-primary');
+                e.target.classList.remove('text-secondary');
+            });
+        });
+    });
 </script>
 @endsection
