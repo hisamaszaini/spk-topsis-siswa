@@ -32,11 +32,23 @@ class PenilaianController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_alternatif' => 'required|exists:tabel_alternatif,id_alternatif',
+            'id_alternatif' => 'nullable|exists:tabel_alternatif,id_alternatif',
+            'nama_siswa' => 'required|string|max:100',
             'nilai' => 'required|array',
         ]);
 
-        $id_alternatif = $request->id_alternatif;
+        if ($request->filled('id_alternatif')) {
+            $alternatif = Alternatif::findOrFail($request->id_alternatif);
+            $alternatif->update([
+                'nama_siswa' => $request->nama_siswa,
+            ]);
+        } else {
+            $alternatif = Alternatif::create([
+                'nama_siswa' => $request->nama_siswa,
+            ]);
+        }
+
+        $id_alternatif = $alternatif->id_alternatif;
 
         // Delete existing assessments for this alternative (fresh start/update)
         Penilaian::where('id_alternatif', $id_alternatif)->delete();
@@ -45,11 +57,11 @@ class PenilaianController extends Controller
             Penilaian::create([
                 'id_alternatif' => $id_alternatif,
                 'id_kriteria' => $id_kriteria,
-                'nilai' => $nilai,
+                'nilai' => $nilai ?? 0,
             ]);
         }
 
-        return redirect()->route('penilaian.index')->with('success', 'Penilaian saved successfully.');
+        return redirect()->route('penilaian.index')->with('success', 'Data penilaian berhasil disimpan.');
     }
 
     public function edit(Alternatif $alternatif)
@@ -79,7 +91,7 @@ class PenilaianController extends Controller
     {
         try {
             Penilaian::where('id_alternatif', $id_alternatif)->delete();
-            return redirect()->route('penilaian.index')->with('success', 'Penilaian deleted successfully.');
+            return redirect()->route('penilaian.index')->with('success', 'Data penilaian berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->route('penilaian.index')->with('error', 'Terjadi kesalahan saat menghapus data.');
         }

@@ -26,11 +26,13 @@ class SubKriteriaController extends Controller
             'id_kriteria' => 'required|exists:tabel_kriteria,id_kriteria',
             'nama_sub' => 'required|string|max:100',
             'nilai' => 'required|numeric',
+            'nilai_min' => 'nullable|numeric',
+            'nilai_max' => 'nullable|numeric',
         ]);
 
         SubKriteria::create($request->all());
 
-        return redirect()->route('sub-kriteria.index')->with('success', 'Sub Kriteria created successfully.');
+        return redirect()->route('sub-kriteria.index')->with('success', 'Sub Kriteria berhasil ditambahkan.');
     }
 
     public function edit(SubKriteria $subKriterium)
@@ -45,18 +47,20 @@ class SubKriteriaController extends Controller
             'id_kriteria' => 'required|exists:tabel_kriteria,id_kriteria',
             'nama_sub' => 'required|string|max:100',
             'nilai' => 'required|numeric',
+            'nilai_min' => 'nullable|numeric',
+            'nilai_max' => 'nullable|numeric',
         ]);
 
         $subKriterium->update($request->all());
 
-        return redirect()->route('sub-kriteria.index')->with('success', 'Sub Kriteria updated successfully.');
+        return redirect()->route('sub-kriteria.index')->with('success', 'Sub Kriteria berhasil diperbarui.');
     }
 
     public function destroy(SubKriteria $subKriterium)
     {
         try {
             $subKriterium->delete();
-            return redirect()->route('sub-kriteria.index')->with('success', 'Sub Kriteria deleted successfully.');
+            return redirect()->route('sub-kriteria.index')->with('success', 'Sub Kriteria berhasil dihapus.');
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->route('sub-kriteria.index')->with('error', 'Data tidak dapat dihapus karena sedang digunakan.');
         }

@@ -26,7 +26,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-danger"><i class="fa fa-table"></i> Daftar Data Penilaian</h6>
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-table"></i> Daftar Data Penilaian</h6>
         <button class="btn btn-sm btn-success shadow-sm btn-create" data-toggle="modal" data-target="#penilaianModal">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Data
         </button>
@@ -61,6 +61,7 @@
                         <td class="text-center">
                             <button class="btn btn-warning btn-sm btn-edit"
                                 data-id="{{ $alternatif->id_alternatif }}"
+                                data-nama="{{ $alternatif->nama_siswa }}"
                                 data-scores="{{ json_encode($alternatif->penilaian->pluck('nilai', 'id_kriteria')) }}"
                                 data-toggle="modal" data-target="#penilaianModal">
                                 <i class="fas fa-edit"></i>
@@ -83,7 +84,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="penilaianModal" tabindex="-1" role="dialog" aria-labelledby="penilaianModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="penilaianModalLabel">Input Penilaian Siswa</h5>
@@ -96,28 +97,15 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Nama Siswa</label>
-                        <select name="id_alternatif" id="id_alternatif" class="form-control" required>
-                            <option value="">-- Pilih Siswa --</option>
-                            @foreach($alternatifs as $alt)
-                            <option value="{{ $alt->id_alternatif }}">{{ $alt->nama_siswa }} ({{ $alt->nisn }})</option>
-                            @endforeach
-                        </select>
+                        <input type="text" name="nama_siswa" id="nama_siswa" class="form-control" required placeholder="Masukkan Nama Siswa">
+                        <input type="hidden" name="id_alternatif" id="id_alternatif">
                     </div>
                     <hr>
                     @foreach($kriterias as $kriteria)
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label">{{ $kriteria->nama_kriteria }}</label>
                         <div class="col-sm-8">
-                            @if($kriteria->sub_kriteria->count() > 0)
-                            <select name="nilai[{{ $kriteria->id_kriteria }}]" class="form-control score-input" data-kriteria="{{ $kriteria->id_kriteria }}" required>
-                                <option value="">-- Pilih --</option>
-                                @foreach($kriteria->sub_kriteria as $sub)
-                                <option value="{{ $sub->nilai }}">{{ $sub->nama_sub }} (Nilai: {{ $sub->nilai }})</option>
-                                @endforeach
-                            </select>
-                            @else
-                            <input type="number" name="nilai[{{ $kriteria->id_kriteria }}]" class="form-control score-input" data-kriteria="{{ $kriteria->id_kriteria }}" required placeholder="Masukkan Nilai">
-                            @endif
+                            <input type="number" step="any" name="nilai[{{ $kriteria->id_kriteria }}]" class="form-control score-input" data-kriteria="{{ $kriteria->id_kriteria }}" required placeholder="Masukkan Nilai">
                         </div>
                     </div>
                     @endforeach
@@ -146,23 +134,19 @@
         $('.btn-create').on('click', function() {
             $('#penilaianModalLabel').text('Tambah Penilaian');
             $('#penilaianForm')[0].reset();
-            $('#id_alternatif').find('option').not(':first').removeAttr('disabled');
-            // Enable select
-            $('#id_alternatif').css('pointer-events', 'auto').css('background-color', '#fff');
+            $('#id_alternatif').val('');
+            $('#nama_siswa').val('');
         });
 
         $('.btn-edit').on('click', function() {
             $('#penilaianModalLabel').text('Edit Penilaian');
             var id = $(this).data('id');
+            var nama = $(this).data('nama');
             var scores = $(this).data('scores'); // JSON object
 
-            // Set Alternatif and Lock it
+            // Set Alternatif ID and Name
             $('#id_alternatif').val(id);
-            // Disable changing the alternative during edit to prevent conflicts/confusion
-            // Or visually lock it
-            $('#id_alternatif option').not(':selected').attr('disabled', 'disabled');
-            $('#id_alternatif').css('pointer-events', 'none').css('background-color', '#e9ecef');
-
+            $('#nama_siswa').val(nama);
 
             // Reset inputs first
             $('.score-input').val('');
@@ -171,13 +155,7 @@
             if (scores) {
                 $.each(scores, function(kriteriaId, nilai) {
                     var input = $('.score-input[data-kriteria="' + kriteriaId + '"]');
-                    if (input.is('select')) {
-                        // Check if the value exists in options (Sub Kriteria)
-                        // Sometimes values might not match exactly if floating point, but usually integer.
-                        input.val(nilai);
-                    } else {
-                        input.val(nilai);
-                    }
+                    input.val(nilai);
                 });
             }
         });

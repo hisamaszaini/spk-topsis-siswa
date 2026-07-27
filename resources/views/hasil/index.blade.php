@@ -28,7 +28,6 @@
                 <thead>
                     <tr class="bg-gray-100">
                         <th width="10%">Ranking</th>
-                        <th>NISN</th>
                         <th>Nama Siswa</th>
                         <th>Nilai Preferensi (Ci)</th>
                     </tr>
@@ -47,7 +46,6 @@
                             {{ $index + 1 }}
                             @endif
                         </td>
-                        <td>{{ $rank->alternatif->nisn }}</td>
                         <td>{{ $rank->alternatif->nama_siswa }}</td>
                         <td class="text-right">{{ number_format($rank->nilai_preferensi, 4) }}</td>
                     </tr>

@@ -20,7 +20,7 @@ class TopsisService
     public function calculate(): array
     {
         // 1. Ambil Data Kriteria dan Alternatif dari Database
-        $kriterias = Kriteria::all();
+        $kriterias = Kriteria::with('sub_kriteria')->get();
         $alternatifs = Alternatif::with('penilaian')->get();
 
         if ($kriterias->isEmpty() || $alternatifs->isEmpty()) {
@@ -36,7 +36,21 @@ class TopsisService
             $row = [];
             foreach ($kriterias as $kriteria) {
                 $penilaian = $alternatif->penilaian->where('id_kriteria', $kriteria->id_kriteria)->first();
-                $row[$kriteria->id_kriteria] = $penilaian ? $penilaian->nilai : 0;
+                $nilaiRaw = $penilaian ? $penilaian->nilai : 0;
+
+                // Map raw score to sub criteria if sub criteria has range values
+                $nilaiMapped = $nilaiRaw;
+                if ($kriteria->sub_kriteria->isNotEmpty()) {
+                    $matchedSub = $kriteria->sub_kriteria->first(function ($sub) use ($nilaiRaw) {
+                        return $sub->nilai_min !== null && $sub->nilai_max !== null
+                            && $nilaiRaw >= $sub->nilai_min && $nilaiRaw <= $sub->nilai_max;
+                    });
+                    if ($matchedSub) {
+                        $nilaiMapped = $matchedSub->nilai;
+                    }
+                }
+
+                $row[$kriteria->id_kriteria] = $nilaiMapped;
             }
             $matrixX[$alternatif->id_alternatif] = $row;
         }
@@ -123,7 +137,6 @@ class TopsisService
             $preference[] = [
                 'id_alternatif' => $alternatif->id_alternatif,
                 'nama_siswa' => $alternatif->nama_siswa,
-                'nisn' => $alternatif->nisn,
                 'score' => $score
             ];
         }

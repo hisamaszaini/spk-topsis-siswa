@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('tabel_alternatif', function (Blueprint $table) {
             $table->id('id_alternatif');
-            $table->string('nisn', 20)->unique();
             $table->string('nama_siswa', 100);
             $table->timestamps();
         });

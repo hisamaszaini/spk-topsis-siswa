@@ -42,7 +42,7 @@
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-danger"><i class="fa fa-users"></i> Daftar Data User</h6>
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-users"></i> Daftar Data User</h6>
         <button class="btn btn-sm btn-success shadow-sm btn-create" data-toggle="modal" data-target="#createModal">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah User
         </button>
@@ -51,7 +51,7 @@
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
-                    <tr class="bg-danger text-white">
+                    <tr class="bg-primary text-white">
                         <th width="5%">No</th>
                         <th>Nama</th>
                         <th>Email</th>
@@ -101,11 +101,11 @@
 
 <!-- Create Modal -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
+            <div class="modal-header">
                 <h5 class="modal-title" id="createModalLabel">Tambah User Baru</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -143,7 +143,7 @@
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning text-white">
                 <h5 class="modal-title" id="editModalLabel">Edit User</h5>

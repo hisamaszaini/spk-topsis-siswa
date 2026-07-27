@@ -29,7 +29,7 @@ class KriteriaController extends Controller
 
         Kriteria::create($request->all());
 
-        return redirect()->route('kriteria.index')->with('success', 'Kriteria created successfully.');
+        return redirect()->route('kriteria.index')->with('success', 'Kriteria berhasil ditambahkan.');
     }
 
     public function edit(Kriteria $kriterium)
@@ -48,14 +48,14 @@ class KriteriaController extends Controller
 
         $kriterium->update($request->all());
 
-        return redirect()->route('kriteria.index')->with('success', 'Kriteria updated successfully.');
+        return redirect()->route('kriteria.index')->with('success', 'Kriteria berhasil diperbarui.');
     }
 
     public function destroy(Kriteria $kriterium)
     {
         try {
             $kriterium->delete();
-            return redirect()->route('kriteria.index')->with('success', 'Kriteria deleted successfully.');
+            return redirect()->route('kriteria.index')->with('success', 'Kriteria berhasil dihapus.');
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == 23000) {
                 return redirect()->route('kriteria.index')->with('error', 'Data tidak dapat dihapus karena berelasi dengan data lain (Sub Kriteria/Penilaian).');

@@ -21,13 +21,12 @@ class AlternatifController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nisn' => 'required|string|max:20|unique:tabel_alternatif',
             'nama_siswa' => 'required|string|max:100',
         ]);
 
         Alternatif::create($request->all());
 
-        return redirect()->route('alternatif.index')->with('success', 'Alternatif created successfully.');
+        return redirect()->route('alternatif.index')->with('success', 'Alternatif berhasil ditambahkan.');
     }
 
     public function edit(Alternatif $alternatif)
@@ -38,20 +37,19 @@ class AlternatifController extends Controller
     public function update(Request $request, Alternatif $alternatif)
     {
         $request->validate([
-            'nisn' => 'required|string|max:20|unique:tabel_alternatif,nisn,' . $alternatif->id_alternatif . ',id_alternatif',
             'nama_siswa' => 'required|string|max:100',
         ]);
 
         $alternatif->update($request->all());
 
-        return redirect()->route('alternatif.index')->with('success', 'Alternatif updated successfully.');
+        return redirect()->route('alternatif.index')->with('success', 'Alternatif berhasil diperbarui.');
     }
 
     public function destroy(Alternatif $alternatif)
     {
         try {
             $alternatif->delete();
-            return redirect()->route('alternatif.index')->with('success', 'Alternatif deleted successfully.');
+            return redirect()->route('alternatif.index')->with('success', 'Alternatif berhasil dihapus.');
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->route('alternatif.index')->with('error', 'Data tidak dapat dihapus karena sedang digunakan di tabel lain.');
         }

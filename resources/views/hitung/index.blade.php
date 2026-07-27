@@ -17,7 +17,6 @@
                 <thead class="bg-primary text-white">
                     <tr>
                         <th width="5%" class="text-center">No</th>
-                        <th>NISN</th>
                         <th>Nama Siswa</th>
                         @foreach($kriterias as $kriteria)
                         <th class="text-center">{{ $kriteria->kode_kriteria }}</th>
@@ -28,7 +27,6 @@
                     @foreach($alternatifs as $alternatif)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $alternatif->nisn }}</td>
                         <td>{{ $alternatif->nama_siswa }}</td>
                         @foreach($kriterias as $kriteria)
                         <td class="text-center">{{ $matrixX[$alternatif->id_alternatif][$kriteria->id_kriteria] ?? 0 }}</td>

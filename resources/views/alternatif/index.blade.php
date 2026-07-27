@@ -37,7 +37,6 @@
                 <thead class="bg-primary text-white">
                     <tr>
                         <th width="5%" class="text-center">No</th>
-                        <th class="text-center">NISN</th>
                         <th class="text-center">Nama Siswa</th>
                         <th width="15%" class="text-center">Aksi</th>
                     </tr>
@@ -46,12 +45,10 @@
                     @foreach($alternatifs as $alternatif)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="text-center">{{ $alternatif->nisn }}</td>
                         <td class="text-center">{{ $alternatif->nama_siswa }}</td>
                         <td class="text-center">
                             <button class="btn btn-warning btn-sm btn-edit"
                                 data-id="{{ $alternatif->id_alternatif }}"
-                                data-nisn="{{ $alternatif->nisn }}"
                                 data-nama="{{ $alternatif->nama_siswa }}"
                                 data-toggle="modal" data-target="#editModal">
                                 <i class="fas fa-edit"></i>
@@ -74,7 +71,7 @@
 
 <!-- Create Modal -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createModalLabel">Tambah Siswa (Alternatif)</h5>
@@ -85,10 +82,6 @@
             <form action="{{ route('alternatif.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>NISN</label>
-                        <input type="text" name="nisn" class="form-control" required placeholder="Contoh: 0012345678">
-                    </div>
                     <div class="form-group">
                         <label>Nama Siswa</label>
                         <input type="text" name="nama_siswa" class="form-control" required placeholder="Nama Lengkap Siswa">
@@ -105,7 +98,7 @@
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Edit Siswa (Alternatif)</h5>
@@ -117,10 +110,6 @@
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>NISN</label>
-                        <input type="text" name="nisn" id="edit_nisn" class="form-control" required>
-                    </div>
                     <div class="form-group">
                         <label>Nama Siswa</label>
                         <input type="text" name="nama_siswa" id="edit_nama_siswa" class="form-control" required>
@@ -144,12 +133,10 @@
         // Handle Edit Modal
         $('.btn-edit').on('click', function() {
             var id = $(this).data('id');
-            var nisn = $(this).data('nisn');
             var nama = $(this).data('nama');
             var url = "{{ url('alternatif') }}/" + id;
 
             $('#editForm').attr('action', url);
-            $('#edit_nisn').val(nisn);
             $('#edit_nama_siswa').val(nama);
         });
     });

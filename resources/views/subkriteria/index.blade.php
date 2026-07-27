@@ -37,10 +37,11 @@
             <table class="table table-bordered table-datatable" width="100%" cellspacing="0">
                 <thead class="bg-primary text-white">
                     <tr>
-                        <th width="5%" class="text-center">No</th>
-                        <th class="text-center">Nama Sub Kriteria</th>
-                        <th class="text-center">Nilai</th>
-                        <th width="15%" class="text-center">Aksi</th>
+                         <th width="5%" class="text-center">No</th>
+                         <th class="text-center">Nama Sub Kriteria</th>
+                         <th class="text-center">Rentang Nilai</th>
+                         <th class="text-center">Nilai (Bobot)</th>
+                         <th width="15%" class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,6 +49,13 @@
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td class="text-center">{{ $sub->nama_sub }}</td>
+                        <td class="text-center">
+                            @if($sub->nilai_min !== null && $sub->nilai_max !== null)
+                                {{ $sub->nilai_min }} - {{ $sub->nilai_max }}
+                            @else
+                                -
+                            @endif
+                        </td>
                         <td class="text-center">{{ $sub->nilai }}</td>
                         <td class="text-center">
                             <button class="btn btn-warning btn-sm btn-edit"
@@ -55,6 +63,8 @@
                                 data-kriteria="{{ $kriteria->id_kriteria }}"
                                 data-nama="{{ $sub->nama_sub }}"
                                 data-nilai="{{ $sub->nilai }}"
+                                data-min="{{ $sub->nilai_min }}"
+                                data-max="{{ $sub->nilai_max }}"
                                 data-toggle="modal" data-target="#editModal">
                                 <i class="fas fa-edit"></i>
                             </button>
@@ -86,7 +96,7 @@
 
 <!-- Create Modal -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createModalLabel">Tambah Sub Kriteria</h5>
@@ -103,8 +113,18 @@
                         <input type="text" name="nama_sub" class="form-control" required placeholder="Contoh: Sangat Baik">
                     </div>
                     <div class="form-group">
-                        <label>Nilai</label>
-                        <input type="number" name="nilai" class="form-control" required placeholder="Contoh: 100">
+                        <label>Nilai (Bobot/Skor)</label>
+                        <input type="number" name="nilai" class="form-control" required placeholder="Contoh: 5">
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <label>Nilai Minimal (Batas Bawah)</label>
+                            <input type="number" step="any" name="nilai_min" class="form-control" placeholder="Contoh: 90">
+                        </div>
+                        <div class="col-6">
+                            <label>Nilai Maksimal (Batas Atas)</label>
+                            <input type="number" step="any" name="nilai_max" class="form-control" placeholder="Contoh: 100">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -118,7 +138,7 @@
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Edit Sub Kriteria</h5>
@@ -136,8 +156,18 @@
                         <input type="text" name="nama_sub" id="edit_nama_sub" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Nilai</label>
+                        <label>Nilai (Bobot/Skor)</label>
                         <input type="number" name="nilai" id="edit_nilai" class="form-control" required>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <label>Nilai Minimal (Batas Bawah)</label>
+                            <input type="number" step="any" name="nilai_min" id="edit_nilai_min" class="form-control">
+                        </div>
+                        <div class="col-6">
+                            <label>Nilai Maksimal (Batas Atas)</label>
+                            <input type="number" step="any" name="nilai_max" id="edit_nilai_max" class="form-control">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -169,12 +199,16 @@
             var kriteria = $(this).data('kriteria');
             var nama = $(this).data('nama');
             var nilai = $(this).data('nilai');
+            var min = $(this).data('min');
+            var max = $(this).data('max');
             var url = "{{ url('sub-kriteria') }}/" + id;
 
             $('#editForm').attr('action', url);
             $('#edit_id_kriteria').val(kriteria);
             $('#edit_nama_sub').val(nama);
             $('#edit_nilai').val(nilai);
+            $('#edit_nilai_min').val(min !== undefined ? min : '');
+            $('#edit_nilai_max').val(max !== undefined ? max : '');
         });
     });
 </script>

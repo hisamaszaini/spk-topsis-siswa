@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_kriteria');
             $table->string('nama_sub', 100);
             $table->float('nilai');
+            $table->float('nilai_min')->nullable();
+            $table->float('nilai_max')->nullable();
             $table->timestamps();
 
             $table->foreign('id_kriteria')->references('id_kriteria')->on('tabel_kriteria')->onDelete('cascade');
